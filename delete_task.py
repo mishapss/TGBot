@@ -12,6 +12,13 @@ DB_CONFIG = {
     "port": 
 }
 
+def get_main_keyboard():
+    """возвращает клаву"""
+    return ReplyKeyboardMarkup(
+        [["Посмотреть задания"], ["Добавить задание"], ["Удалить задание"]],
+    resize_keyboard=True
+    )
+
 async def delete_task_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Инициализация процесса удаления задания"""
     user_id = update.effective_user.id
@@ -53,7 +60,7 @@ async def delete_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     tasks = cursor.fetchall()
 
             if not tasks:
-                await update.message.reply_text(f"У {user_input} нет заданий")
+                await update.message.reply_text(f"У {user_input} нет заданий", reply_markup=get_main_keyboard())
                 del user_states[user_id]
                 return
             
@@ -96,7 +103,7 @@ async def delete_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     deleted_title = cursor.fetchone()[0]
                 conn.commit()
                 
-            await update.message.reply_text(f"✅ Задание '{deleted_title}' удалено!")
+            await update.message.reply_text(f"✅ Задание '{deleted_title}' удалено!", reply_markup=get_main_keyboard())
             
             return "COMPLETE"
 
