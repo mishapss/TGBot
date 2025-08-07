@@ -1,6 +1,7 @@
 from telegram.ext.filters import BaseFilter
 from states import user_states
 
+
 class StateFilter(BaseFilter):
     def __init__(self, state):
         self.state = state
@@ -11,4 +12,5 @@ class StateFilter(BaseFilter):
     @property
     def data_filter(self):
         return True
+  
   
