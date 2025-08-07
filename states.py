@@ -18,7 +18,10 @@ STATES = {
     'WAITING_TITLE': 1,
     'WAITING_DESCRIPTION': 2,
     'WAITING_ASSIGNEE': 3,
-    'WAITING_DUE_DATE': 4
+    'WAITING_DUE_DATE': 4,
+    'WAITING_REMINDER_TYPE': 5,
+    'WAITING_DAILY_TIME': 6
+
 }
 
 # Конфигурация подключения к базе данных
