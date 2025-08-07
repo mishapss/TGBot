@@ -1,8 +1,8 @@
 import psycopg2
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ContextTypes
-from states import user_states
-from keyboard import get_main_keyboard
+from states import user_states, STATE_WAITING_ASSIGNEE_FOR_SHOWING_TASKS
+
 
 #конфигурация подключения к бд
 DB_CONFIG = {
@@ -12,6 +12,12 @@ DB_CONFIG = {
     "host": "",
     "port": 
 }
+
+def get_main_keyboard():
+    return ReplyKeyboardMarkup(
+        [["Посмотреть задания"], ["Добавить задание"], ["Удалить задание"]],
+        resize_keyboard=True
+    )
 
 async def show_task_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Добавление пользователя в комнату показа задания. Должен только устанавливать состояние пользователя и показывать клавиатура."""
@@ -26,6 +32,7 @@ async def show_task_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     )
     
+
 async def handle_show_tasks(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик выбора исполнителя (без изменений)"""
     user_id = update.effective_user.id
