@@ -205,7 +205,7 @@ async def set_username(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("❌ Произошла ошибка. Попробуйте позже.")
 
 def main():
-    TOKEN = "7738428251:AAEBNrKaUucmZ6-reyr1ECEormF_V-aokmg"
+    TOKEN = ""
     application = ApplicationBuilder().token(TOKEN).build()
 
     # Обработчики
@@ -224,3 +224,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
