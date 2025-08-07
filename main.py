@@ -2,10 +2,11 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 from states import user_states
 from delete_task import delete_task_command, delete_task
-from add_task import handle_task_room  # Импортируем напрямую обработчик
-from show_task import show_task_command, handle_show_tasks#, handle_task_selection
+from add_task import add_task_command, handle_task_room
+from show_task import show_task_command, handle_show_tasks
 import asyncio, psycopg2
 from notifier import start_notifier
+#from keyboard23 import get_main_keyboard
 
 DB_CONFIG = {
     "dbname": "",
@@ -14,6 +15,7 @@ DB_CONFIG = {
     "host": "",
     "port": 
 }
+
 async def get_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """получаем chat_id"""
     user = update.effective_user
@@ -63,22 +65,32 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_input = update.message.text.strip()
     user_id = update.effective_user.id
 
+    #print(f"\n[DEBUG] Получено сообщение: '{user_input}' от {user_id}")
+    #print(f"Текущее состояние: {user_states.get(user_id)}")
+    #print(f"User_data: {context.user_data}")
+
+    if user_id in user_states:
+        current_state = user_states[user_id]
+
+        if current_state.startswith("ADD_TASK_"):
+            await handle_task_room(update, context)
+            return
+        elif current_state.startswith("DELETE_TASK"):
+            await delete_task(update, context)
+            return
+        elif current_state.startswith("SHOW_TASK"):
+            await handle_show_tasks(update, context)
+            return
+
+
     if user_input == "Добавить задание":
-        # Очищаем предыдущее состояние
-        if user_id in user_states:
-            del user_states[user_id]
-        context.user_data.clear()
-        
-        # Устанавливаем начальное состояние добавления задачи
-        user_states[user_id] = "ADD_TASK_TITLE"
-        await update.message.reply_text("Введите название задания:")
-        
+        await add_task_command(update, context)
+    
     elif user_input == "Посмотреть задания":
         await show_task_command(update, context)
-        
+ 
     elif user_input == "Удалить задание":
         await delete_task_command(update, context)
-        
     else:
         await handle_unknwon_command(update, context)
 
@@ -148,20 +160,20 @@ async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=get_main_keyboard()
         )
     except Exception as e:
-        print(f"Ошибка регистрации: {e}")  # Теперь выведет реальную ошибку
+        print(f"Ошибка регистрации: {e}")
         await update.message.reply_text("❌ Ошибка регистрации. Попробуйте позже.")
 
 async def set_username(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_id = update.effective_chat.id
-    args = context.args # /set_username Миша
+    args = context.args
 
     if not args:
         await update.message.reply_text("❌ Укажите имя, например: /set_username Миша")
         return
     
-    assignee_name = args[0] #Миша
-    username = user.username #mishapss или none
+    assignee_name = args[0] 
+    username = user.username
 
     if not username:
         await update.message.reply_text("❌ У вас не установлен юзернейм в Telegram. Добавьте его в настройках!")
@@ -193,15 +205,15 @@ async def set_username(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("❌ Произошла ошибка. Попробуйте позже.")
 
 def main():
-    TOKEN = ""
+    TOKEN = "7738428251:AAEBNrKaUucmZ6-reyr1ECEormF_V-aokmg"
     application = ApplicationBuilder().token(TOKEN).build()
 
     # Обработчики
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(CommandHandler("register", register))
     application.add_handler(CommandHandler("myid", get_id))
     application.add_handler(CommandHandler("set_username", set_username))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
     # Фоновые задачи
     loop = asyncio.get_event_loop()
