@@ -4,11 +4,11 @@ from telegram.ext import ContextTypes
 from states import user_states, STATE_DELETE_TASK, STATE_WAITING_TASK_NUMBER
 
 DB_CONFIG = {
-    "dbname": "db1",
-    "user": "postgres",
-    "password": "PGS8!32_admin",
-    "host": "localhost",
-    "port": 5432
+    "dbname": "",
+    "user": "",
+    "password": "",
+    "host": "",
+    "port": 
 }
 
 def get_main_keyboard():
@@ -111,4 +111,5 @@ async def delete_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
             # Всегда очищаем состояние
             if user_id in user_states:
                 del user_states[user_id]
+
             context.user_data.clear()
