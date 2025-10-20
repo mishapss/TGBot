@@ -8,11 +8,11 @@ import asyncio, psycopg2
 from notifier import start_notifier
 
 DB_CONFIG = {
-    "dbname": "db1",
-    "user": "postgres",
-    "password": "PGS8!32_admin",
-    "host": "localhost",
-    "port": 5432
+    "dbname": "",
+    "user": "",
+    "password": "",
+    "host": "",
+    "port": 
 }
 
 async def get_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -216,4 +216,5 @@ def main():
     application.run_polling()
 
 if __name__ == "__main__":
+
     main()
