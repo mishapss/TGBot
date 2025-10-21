@@ -6,11 +6,11 @@ from states import user_states
 
 #configuration to connect to datebase
 DB_CONFIG = {
-    "dbname": "db1",
-    "user": "postgres",
-    "password": "PGS8!32_admin",
-    "host": "localhost",
-    "port": 5432
+    "dbname": "",
+    "user": "",
+    "password": "",
+    "host": "",
+    "port": 
 }
 
 def get_main_keyboard():
@@ -85,4 +85,5 @@ async def handle_show_tasks(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=get_main_keyboard()
         )
         if user_id in user_states:
+
             del user_states[user_id]
