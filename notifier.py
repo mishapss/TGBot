@@ -5,11 +5,11 @@ from typing import Union
 from datetime import datetime, date
 
 DB_CONFIG = {
-    "dbname": "db1",
-    "user": "postgres",
-    "password": "PGS8!32_admin",
-    "host": "localhost",
-    "port": 5432
+    "dbname": "",
+    "user": "",
+    "password": "",
+    "host": "",
+    "port": 
 }
 
 async def notify_assignee(bot_token: str, 
@@ -175,4 +175,5 @@ async def start_notifier(bot_token: str):
            await asyncio.sleep(3600)  
         except Exception as e:
             print(f"Ошибка в notifier: {e}")
+
             await asyncio.sleep(3600)
