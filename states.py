@@ -23,9 +23,10 @@ STATES = {
 }
 
 DB_CONFIG = {
-    "dbname": "db1",
-    "user": "postgres",
-    "password": "PGS8!32_admin",
-    "host": "localhost",
-    "port": 5432
+    "dbname": "",
+    "user": "",
+    "password": "",
+    "host": "",
+    "port": 
+
 }
